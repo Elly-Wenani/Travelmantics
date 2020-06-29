@@ -41,7 +41,7 @@ public class DealInsertActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         TravelDeal mDeal = (TravelDeal) intent.getSerializableExtra("Deal");
-        if (mDeal == null){
+        if (mDeal == null) {
             mDeal = new TravelDeal();
         }
         this.mDeal = mDeal;
@@ -66,19 +66,44 @@ public class DealInsertActivity extends AppCompatActivity {
         if (id == R.id.save_menu) {
             saveDeal();
             Toast.makeText(this, "Deal saved", Toast.LENGTH_SHORT).show();
+            backToList();
             clean();
+            return true;
+        }
+
+        if (id == R.id.delete_menu){
+            deleteDeal();
+            Toast.makeText(this, "Deal deleted", Toast.LENGTH_SHORT).show();
+            backToList();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void saveDeal() {
-        String title = tvTitle.getText().toString();
-        String description = tvDescription.getText().toString();
-        String price = tvPrice.getText().toString();
+        mDeal.setTitle(tvTitle.getText().toString());
+        mDeal.setDescription(tvDescription.getText().toString());
+        mDeal.setPrice(tvPrice.getText().toString());
 
-        TravelDeal deal = new TravelDeal(title, description, price, "");
-        mDatabaseReference.push().setValue(deal);
+        //Updates the values
+        if (mDeal.getId() == null) {
+            mDatabaseReference.push().setValue(mDeal);
+        } else {
+            mDatabaseReference.child(mDeal.getId()).setValue(mDeal);
+        }
+    }
+
+    private void deleteDeal(){
+        if (mDeal == null){
+            Toast.makeText(this, "Save deal before deleting", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        mDatabaseReference.child(mDeal.getId()).removeValue();
+    }
+
+    private void backToList(){
+        Intent intent = new Intent(this, ListActivity.class);
+        startActivity(intent);
     }
 
     private void clean() {
