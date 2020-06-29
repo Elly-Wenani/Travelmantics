@@ -33,7 +33,7 @@ public class InsertActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = mFirebaseDatabase.getReference().child("travelmantics");
+        mDatabaseReference = mFirebaseDatabase.getReference().child("traveldeals");
 
         tvTitle = findViewById(R.id.tvTitle);
         tvDescription = findViewById(R.id.tvDescription);
