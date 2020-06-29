@@ -4,6 +4,6 @@
 
     <item
         android:id="@+id/insert_menu"
-        android:title="New travel deal"
+        android:title="@string/new_travel_deal"
         app:showAsAction="never" />
 </menu>

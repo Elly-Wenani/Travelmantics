@@ -1,5 +1,6 @@
 package com.example.travelmantics;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.firebase.database.DatabaseReference;
@@ -20,6 +21,7 @@ public class DealInsertActivity extends AppCompatActivity {
     EditText tvTitle;
     EditText tvDescription;
     EditText tvPrice;
+    TravelDeal mDeal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,16 @@ public class DealInsertActivity extends AppCompatActivity {
         tvTitle = findViewById(R.id.tvTitle);
         tvDescription = findViewById(R.id.tvDescription);
         tvPrice = findViewById(R.id.tvPrice);
+
+        Intent intent = getIntent();
+        TravelDeal mDeal = (TravelDeal) intent.getSerializableExtra("Deal");
+        if (mDeal == null){
+            mDeal = new TravelDeal();
+        }
+        this.mDeal = mDeal;
+        tvTitle.setText(mDeal.getTitle());
+        tvDescription.setText(mDeal.getDescription());
+        tvPrice.setText(mDeal.getPrice());
     }
 
     @Override
