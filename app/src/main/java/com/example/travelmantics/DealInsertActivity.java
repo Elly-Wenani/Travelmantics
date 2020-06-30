@@ -30,7 +30,7 @@ public class DealInsertActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FirebaseUtil.openFbReference("traveldeals");
+        //FirebaseUtil.openFbReference("traveldeals");
 
         mFirebaseDatabase = FirebaseUtil.mFirebaseDatabase;
         mDatabaseReference = FirebaseUtil.mDatabaseReference;
@@ -104,6 +104,7 @@ public class DealInsertActivity extends AppCompatActivity {
     private void backToList(){
         Intent intent = new Intent(this, ListActivity.class);
         startActivity(intent);
+        this.finish();
     }
 
     private void clean() {

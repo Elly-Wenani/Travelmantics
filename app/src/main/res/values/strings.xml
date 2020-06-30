@@ -16,4 +16,5 @@
     <string name="image_content_dsicription">Image</string>
     <string name="new_travel_deal">New travel deal</string>
     <string name="delete_deal">Delete deal</string>
+    <string name="logout_menu">Logout</string>
 </resources>
