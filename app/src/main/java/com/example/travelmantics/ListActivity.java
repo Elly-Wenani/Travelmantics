@@ -41,6 +41,12 @@ public class ListActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.list_activity_menu, menu);
+        MenuItem insertMenu = menu.findItem(R.id.insert_menu);
+        if (FirebaseUtil.isAdmin == true) {
+            insertMenu.setVisible(true);
+        } else {
+            insertMenu.setVisible(false);
+        }
         return true;
     }
 
@@ -48,12 +54,12 @@ public class ListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.insert_menu){
+        if (id == R.id.insert_menu) {
             Intent intent = new Intent(this, DealInsertActivity.class);
             startActivity(intent);
         }
 
-        if (id == R.id.logout_menu){
+        if (id == R.id.logout_menu) {
             AuthUI.getInstance()
                     .signOut(this)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -79,6 +85,7 @@ public class ListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        
         FirebaseUtil.openFbReference("traveldeals", this);
         RecyclerView rvDeals = findViewById(R.id.rvDeals);
         final DealAdapter adapter = new DealAdapter();
@@ -88,5 +95,9 @@ public class ListActivity extends AppCompatActivity {
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvDeals.setLayoutManager(dealLayoutManager);
         FirebaseUtil.attachListener();
+    }
+
+    public void showMenu() {
+        invalidateOptionsMenu();
     }
 }

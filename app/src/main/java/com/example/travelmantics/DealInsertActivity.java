@@ -54,6 +54,16 @@ public class DealInsertActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.save_menu, menu);
+        if (FirebaseUtil.isAdmin){
+            menu.findItem(R.id.delete_menu).setVisible(true);
+            menu.findItem(R.id.save_menu).setVisible(true);
+            //menu.findItem(R.id.insert_menu).setVisible(true);
+            enableEditText(true);
+        } else {
+            menu.findItem(R.id.delete_menu).setVisible(false);
+            menu.findItem(R.id.save_menu).setVisible(false);
+            enableEditText(false);
+        }
         return true;
     }
 
@@ -104,7 +114,7 @@ public class DealInsertActivity extends AppCompatActivity {
     private void backToList(){
         Intent intent = new Intent(this, ListActivity.class);
         startActivity(intent);
-        this.finish();
+        DealInsertActivity.this.finish();
     }
 
     private void clean() {
@@ -112,5 +122,11 @@ public class DealInsertActivity extends AppCompatActivity {
         tvDescription.setText("");
         tvPrice.setText("");
         tvTitle.requestFocus();
+    }
+
+    private void enableEditText(boolean isEnabled){
+        tvTitle.setEnabled(isEnabled);
+        tvDescription.setEnabled(isEnabled);
+        tvPrice.setEnabled(isEnabled);
     }
 }
