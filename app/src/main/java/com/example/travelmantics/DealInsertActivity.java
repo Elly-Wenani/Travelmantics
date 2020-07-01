@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -12,10 +13,12 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -88,10 +91,13 @@ public class DealInsertActivity extends AppCompatActivity {
             menu.findItem(R.id.save_menu).setVisible(true);
             //menu.findItem(R.id.insert_menu).setVisible(true);
             enableEditText(true);
+            findViewById(R.id.btnImage).setEnabled(true);
         } else {
             menu.findItem(R.id.delete_menu).setVisible(false);
             menu.findItem(R.id.save_menu).setVisible(false);
             enableEditText(false);
+            findViewById(R.id.btnImage).setEnabled(false);
+            //findViewById(R.id.btnImage).setVisibility(View.GONE);
         }
         return true;
     }
@@ -132,7 +138,11 @@ public class DealInsertActivity extends AppCompatActivity {
                     //String url = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
 
                     String url = imageUri.toString();
+                    String pictureName = taskSnapshot.getStorage().getPath();
                     mDeal.setImageUrl(url);
+                    mDeal.setImageName(pictureName);
+                    Log.d("Url", url);
+                    Log.d("Name", pictureName);
                     showImage(url);
                 }
             });
@@ -158,6 +168,20 @@ public class DealInsertActivity extends AppCompatActivity {
             return;
         }
         mDatabaseReference.child(mDeal.getId()).removeValue();
+        if (mDeal.getImageName() != null && mDeal.getImageName().isEmpty() == false){
+            StorageReference picref = FirebaseUtil.mStorage.getReference().child(mDeal.getImageName());
+            picref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d("Delete image: ", "Image deleted successfully");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("Delete image: ", e.getMessage());
+                }
+            });
+        }
     }
 
     private void backToList() {
